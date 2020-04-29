@@ -1,0 +1,75 @@
+body {
+	margin: 0;
+	background-color: #2F3336;
+	color: #efefef;
+	font-family: 'Open Sans', sans-serif;
+	font-size: 17px;
+	text-align: center;
+}
+
+h1.logo {
+	margin: 0;
+	background-color: #52595f;
+	font-size: 30px;
+	font-weight: 700;
+	font-family: cursive; 
+	color : #ddd;
+	text-align: center;
+	text-transform: uppercase;
+	letter-spacing: 1px;
+/* 	margin-top: 50px; */
+	margin-bottom: 0;
+	color: #ddd;
+}
+
+.restaurantNameInLogo {
+	font-family: Brush Script MT;
+	font-size: 55px;
+	font-weight: 500;
+	text-transform: uppercase;
+	letter-spacing: 10px;
+}
+
+#topNav {
+	height: 38px;
+	background-color: #1c74b2;
+	text-align: center;
+}
+
+.menu {
+	list-style-type: none;
+	margin-top: 0;
+	margin-bottom: 0;
+/* 	padding-top: 10px; */
+/* 	padding-bottom: 10px; */
+	font-size: 18px;
+	
+}
+
+.menu > li {
+	display: inline-block;
+	width: 170px;
+/* 	padding-left: 50px; */
+/* 	padding-right: 50px; */
+	border-right: black 1px dashed;
+	vertical-align: middle;
+	padding-top: 8px;
+	padding-bottom: 8px;
+}
+
+.menu > li:first-child {
+	border-left: black 1px dashed;
+}
+
+.menu a {
+	text-decoration: none;
+	color: #fff;
+}
+
+.menu a:hover {
+	color: #0a2b42;
+}
+
+.mainArticle {
+	padding: 30px;
+}
