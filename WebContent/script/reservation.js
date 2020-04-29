@@ -1,34 +1,6 @@
 $(document).ready(function() {
 	$('#reservationForm :text:first').focus();
 	
-//	$('#name').click(function() {
-//		$('#phoneNumber').prop('disabled', true).css('background-color', '#CCC').slideDown('fast');
-//	});
-//	
-//	$('#reservationForm').submit(function() {
-//		$('input[type=submit]').prop('disabled', true);
-//		if ($(':text:first').val() == '') {
-//			return false;
-//		}
-//	});
-//	
-//	$('.topNav').click(function() {
-//		$('input[type=submit]').prop('disabled', true);
-//	});
-	
-//	$.ajax({
-//		type: 'GET',
-//		url: 'http://localhost:8080/tables',
-//		dataType: 'json',
-//		success: function (tables) {
-//			for (var i = 0; i < tables.restaurantTables.length; i++) {
-//				$('.table_t').append('<tr><td>' + tables.restaurantTables[i].id + '</td><td>' + tables.restaurantTables[i].tableNumber + 
-//						'</td><td>' + tables.restaurantTables[i].numberOfSeats + '</td></tr>');
-//			}
-//			console.log(tables);
-//		}
-//	});
-	
 	$("#reservationForm").submit(function() {
 		let formData = $('#reservationForm').serialize();
 		
@@ -46,14 +18,7 @@ $(document).ready(function() {
 		
 		return false;
 	});
-	
-//	$("#name").change(function(e) {
-//		if (e.target.value == '1') {
-//			$(this).css('background-color', '#CCC');
-//		} else {
-//			$(this).css('background-color', '#FFF');
-//		}
-//	});
+
 	$('input[class="timeTableRes"]').blur(function(e) {
 		
 		let timeTable = {
