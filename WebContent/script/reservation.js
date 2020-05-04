@@ -1,58 +1,74 @@
 $(document).ready(function() {
 	$('#reservationForm :text:first').focus();
-	
-	$("#reservationForm").submit(function() {
-		let formData = $('#reservationForm').serialize();
-		
-//		$.post("http://localhost:8080/reservations", formData)
-//		.done(doneResponse)
-//		.fail(failResponse);
-		
-		$.ajax({
-			type: 'POST',
-			url: 'http://localhost:8080/reservations',
-			data: formData,
-			success: doneResponse,
-			error: failResponse
-		});
-		
-		return false;
-	});
-
-	$('input[class="timeTableRes"]').blur(function(e) {
-		
-		let timeTable = {
-			tableNumber: $('#tableNumber').val(),
-			date: $('#date').val(),
-			startHour: $('#startHour').val(),
-			endHour: $('#endHour').val()
-		};
-		if (validTimeTableRes(timeTable)) {
-			$.ajax({
-				type: 'POST',
-				url: 'http://localhost:8080/resevations/freehours',
-				data: timeTable,
-				success: function(response) {
-					$('.inf').remove();
-				},
-				error: function(response) {
-					if (response.responseJSON.httpStatus != 'BAD_REQUEST') {
-						$('.inf').remove();
-						$('main').append('<p class="inf">Stolik w podanej godzinie jest zajety.</p>');
-						$('main').append('<p class="inf">Oto wolne godziny:</p>');
-						
-						let timeIntervals = response.responseJSON.timeIntervals.timeIntervals;
-						let length = timeIntervals.length;
-						for (let i = 0; i < length; i++) {
-							$('main').append('<p class="inf">' + timeIntervals[i].startHour + ' - ' + timeIntervals[i].endHour + ':</p>');
-						}
-					}
-				}
-			});
-		}
-	});
-	
+	$("#reservationForm").submit(postReservationForm);
+	$('input[class="timeTableRes"]').blur(checkIfTheTableIsFree);
 });
+
+function checkIfTheTableIsFree() {
+	let timeTable = {
+		tableNumber: $('#tableNumber').val(),
+		date: $('#date').val(),
+		startHour: $('#startHour').val(),
+		endHour: $('#endHour').val()
+	};
+	if (validTimeTableRes(timeTable)) {
+		postCheckFreeHours(timeTable);
+	}
+}
+
+function postCheckFreeHours(timeTable) {
+	$.ajax({
+		type: 'POST',
+		url: 'http://localhost:8080/resevations/freehours',
+		data: timeTable,
+		success: donePostCheckFreeHours,
+		error: failPostCheckFreeHours
+	});
+}
+
+function donePostCheckFreeHours() {
+	$('.inf').remove();
+}
+
+function failPostCheckFreeHours(response) {
+	if (response.responseJSON.httpStatus != 'BAD_REQUEST') {
+		let alertString = 'Stolik w podanej godzinie jest zajety\n';
+		alertString += 'Oto wolne godziny:\n';
+		
+		let timeIntervals = response.responseJSON.timeIntervals.timeIntervals;
+		let length = timeIntervals.length;
+		for (let i = 0; i < length; i++) {
+			let startHour = getHourFromLocalDateTime(timeIntervals[i].startHour);
+			let endHour = getHourFromLocalDateTime(timeIntervals[i].endHour);
+			alertString += startHour + ' - ' + endHour + '\n';
+		}
+		alert(alertString);
+	}
+}
+
+function getHourFromLocalDateTime(dateTime) {
+	let size = dateTime.length;
+	let hour = "";
+	
+	for (let i = 8; i >= 4; i--) {
+		hour += dateTime[size - i];
+	}
+	return hour;
+}
+
+function postReservationForm() {
+	let formData = $('#reservationForm').serialize();
+	
+	$.ajax({
+		type: 'POST',
+		url: 'http://localhost:8080/reservations',
+		data: formData,
+		success: donePostReservationFormResponse,
+		error: failPostReservationFormResponse
+	});
+	
+	return false;
+}
 
 function validTimeTableRes(tt) {
 	let flag = true;
@@ -80,8 +96,6 @@ function validTimeTableRes(tt) {
 		flag = false;
 	}
 	
-	
-	
 	return flag;
 }
 
@@ -89,11 +103,11 @@ function changeName(response) {
 	console.log(response);
 }
 
-function doneResponse(response) {
+function donePostReservationFormResponse(response) {
 	location.replace('index.html');
 }
 
-function failResponse(xhr, status, error) {
+function failPostReservationFormResponse(xhr, status, error) {
 	$('.error').remove();
 	let respJSON = xhr.responseJSON;
 	console.log(respJSON);
